@@ -1,8 +1,8 @@
-#include "contoller.h"
+#include "controller.h"
 
-Contoller::Contoller(){
+Controller::Controller(){
   this->field_ptr = new Field;
-  this->io_ptr = new IO(field_ptr);
+//  this->io_ptr = new IO(field_ptr);
 }
 
 void Controller::mainCirc(){
@@ -12,7 +12,7 @@ void Controller::mainCirc(){
     IO_TO_CONT_MSG msg = this->io_ptr->move();
 
     if (msg.type == MOVE)
-      field_ptr->moveCells(msg.src, msg.dist);
+      field_ptr->moveCells(msg.src, msg.dest);
 
     if (msg.type == CHANGE_IO){
       IO* temp = this->io_ptr->get_new_io_ptr(msg.new_io_num);

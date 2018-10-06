@@ -1,6 +1,15 @@
-#IFNDEF CONSTS_H
-#DEFINE CONSTS_H
+#ifndef CONSTS_H
+#define CONSTS_H
 
-#DEFINE FIELD_SIZE 10;
+#define FIELD_SIZE 5
+#define COLORS_AMOUNT 3
+#define CHIPS_OF_THE_COLOR 5
+#define BLOCKED_AMOUNT 6
+#define FREE_SPACE_AMOUNT 4
 
-#ENDIF
+
+#define MOVE 1
+#define CHANGE_IO 2
+#define GAME_FINISHED 3
+
+#endif

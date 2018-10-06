@@ -1,5 +1,6 @@
-#IFNDEF CELL_H
-#DEFINE CELL_H
+#ifndef CELL_H
+#define CELL_H
+#include "stdlibs.h"
 
 class Cell{
 public:
@@ -7,5 +8,12 @@ public:
   bool free_space;
   bool blocked_space;
   int color;
+
+  int x;
+  int y;
+
+  Cell();
+
+  bool isAdjacentWith(Cell* cell_ptr);
 };
-#ENDIF
+#endif // CELL_H
