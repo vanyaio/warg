@@ -1,6 +1,8 @@
 #ifndef IO_CONT_MSG_H
 #define IO_CONT_MSG_H
 
+#include "cell.h"
+
 class IO_TO_CONT_MSG{
 public:
   int type;
@@ -8,11 +10,11 @@ public:
   bool new_game;
   bool exit_game;
 
-  Cell* src;
-  Cell* dest;
+  Cell** src;
+  Cell** dest;
 
   int new_io_num;
-  IO_CONT_MSG();
+  IO_TO_CONT_MSG();
 };
 
 #endif

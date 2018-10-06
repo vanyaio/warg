@@ -65,19 +65,9 @@ void Field::moveCells(Cell*& src, Cell*& dest){
     return;
   if (src->chip && dest->free_space)
   {
-    std::cout << src << " " << dest << std::endl;
-    std::cout << src->x << " " << src->y << " " << src->chip << std::endl;
-    std::cout << dest->x << " " << dest->y << " " << dest->chip << std::endl;
-    std::cout << "______________\n";
-
     std::swap(src, dest);
     std::swap(src->x, dest->x);
     std::swap(src->y, dest->y);
-
-    std::cout << src << " " << dest << std::endl;
-    std::cout << src->x << " " << src->y << " " << src->chip << std::endl;
-    std::cout << dest->x << " " << dest->y << " " << dest->chip << std::endl;
-    std::cout << "______________\n";
   }
   return;
 }
