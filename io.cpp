@@ -1,6 +1,30 @@
 #include "io.h"
 
 
+IO_TO_CONT_MSG SwitchIO::move(){
+    IO_TO_CONT_MSG res;
+    std::cout << "Available graphical modes:\n";
+    for (int i = 0; i < IOfactory::IOlist.size(); i++)
+      std::cout << i << ". " << IOfactory::IOlist[i] << std::endl;
+
+    std::cout << "Type number:\n";
+    int new_io_num;
+    std::cin >> new_io_num;
+
+    res.type = CHANGE_IO;
+    res.new_io_num = new_io_num;
+    return res;
+}
+SwitchIO::SwitchIO(Field* _field_ptr){
+  this->field_ptr = _field_ptr;
+}
+
+
+
+
+
+
+
 TextIO::TextIO(Field* _field_ptr){
   this->field_ptr = _field_ptr;
 }
@@ -14,9 +38,20 @@ IO_TO_CONT_MSG TextIO::move(){
   IO_TO_CONT_MSG res;
 
   if (this->SwitchIOrequested()){
+    std::cout << "Available graphical modes:\n";
+    for (int i = 0; i < IOfactory::IOlist.size(); i++)
+      std::cout << i << ". " << IOfactory::IOlist[i] << std::endl;
 
+    std::cout << "Type number:\n";
+    int new_io_num;
+    std::cin >> new_io_num;
+
+    res.type = CHANGE_IO;
+    res.new_io_num = new_io_num;
+    return res;
   }
 
+  std::cout << "Type your move: \n";
   int coord[4];
   std::cin >> coord[0] >> coord[1] >> coord[2] >> coord[3];
   if (!this->isMoveInCorrect(coord)){
@@ -32,7 +67,7 @@ IO_TO_CONT_MSG TextIO::move(){
 IO_TO_CONT_MSG TextIO::handleFinish(){
     IO_TO_CONT_MSG res;
     res.type = GAME_FINISHED;
-    std::cout << "YOU WIN! CONTINIE: Y\N \n";
+    std::cout << "YOU WIN! CONTINIE: Y or N \n";
     char c;
     std::cin >> c;
     if (c == 'y' || c == 'Y')
@@ -41,6 +76,11 @@ IO_TO_CONT_MSG TextIO::handleFinish(){
 }
 
 bool TextIO::SwitchIOrequested(){
+  std::cout << "Switch or Move?\n";
+  char c;
+  std::cin >> c;
+  if (c == 's' || c == 'S')
+    return true;
   return false;
 }
 void TextIO::printField(){
@@ -70,4 +110,30 @@ bool TextIO::isMoveInCorrect(int arr[]){
     if (arr[i] >= FIELD_SIZE || arr[i] < 0)
       return false;
   return true;
+}
+
+
+
+
+
+
+
+
+
+
+const std::vector<std::string> IOfactory :: IOlist({"Switch mode", "Text mode"});
+IO* IOfactory::get_new_io_ptr(int new_io_num, Field* field_ptr)
+{
+  switch (new_io_num)
+  {
+    case 0:
+      return new SwitchIO(field_ptr);
+      break;
+    case 1:
+      return new TextIO(field_ptr);
+      break;
+
+    default:
+      return new TextIO(field_ptr);
+  }
 }
