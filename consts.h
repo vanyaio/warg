@@ -28,4 +28,7 @@
 #define FREE_COLOR 119
 #define BLOCKED_COLOR 0
 
+
+#define S_KEY 0x53
+#define C_KEY 0x43
 #endif

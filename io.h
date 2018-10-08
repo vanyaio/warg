@@ -34,4 +34,6 @@ public:
   const static std::vector<std::string> IOlist;
   static IO* get_new_io_ptr(int new_io_num, Field* field_ptr);
 };
+
+#include "colored_io.h"
 #endif
