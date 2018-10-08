@@ -42,6 +42,25 @@ void ColoredIO::print_field()
       if (curr_ptr->chip)
       {
         curr_sign = 'o';
+        bool flag1, flag2;
+        flag1 = (this->cursored_cell == (&this->field_ptr->cells_arr[i][j]));
+        flag2 = (this->selected_cell == (&this->field_ptr->cells_arr[i][j]));
+        if (this->cursored_cell == (&this->field_ptr->cells_arr[i][j]))
+        {
+          switch (curr_ptr->color)
+          {
+          case RED:
+            curr_color = RED_CURSORED;
+            break;
+          case GREEN:
+            curr_color = GREEN_CURSORED;
+            break;
+          case BLUE:
+            curr_color = BLUE_CURSORED;
+            break;
+          }
+        }
+
         if (this->selected_cell == (&this->field_ptr->cells_arr[i][j]))
         {
           switch (curr_ptr->color)
@@ -57,7 +76,8 @@ void ColoredIO::print_field()
             break;
           }
         }
-        else
+
+        if (!flag1 && !flag2)
         {
           switch (curr_ptr->color)
           {
@@ -72,6 +92,7 @@ void ColoredIO::print_field()
             break;
           }
         }
+
       }
 
       if (curr_ptr->blocked_space)

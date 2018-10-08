@@ -13,6 +13,7 @@
 #define GAME_FINISHED 3
 
 
+
 #define RED 0
 #define GREEN 1
 #define BLUE 2
@@ -21,9 +22,16 @@
 #define GREEN_IO 42
 #define BLUE_IO 19
 
-#define RED_SELECTED 236
-#define GREEN_SELECTED 234
-#define BLUE_SELECTED 233
+#define RED_SELECTED 92
+#define GREEN_SELECTED 90
+#define BLUE_SELECTED 89
+
+#define RED_CURSORED 236
+#define GREEN_CURSORED 234
+#define BLUE_CURSORED 233
+
+
+
 
 #define FREE_COLOR 119
 #define BLOCKED_COLOR 0
