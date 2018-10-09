@@ -1,5 +1,6 @@
 #include "controller.h"
-
+#include "io_modes/switch_io.h"
+#include "io_factory.h"
 Controller::Controller(){
   this->field_ptr = new Field;
   this->io_ptr = new SwitchIO(field_ptr);

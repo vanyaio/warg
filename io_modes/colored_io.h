@@ -1,7 +1,8 @@
 #ifndef COLORED_IO_H
 #define COLORED_IO_H
 
-#include "io.h"
+#include "../io.h"
+
 class pixel
 {
 public:

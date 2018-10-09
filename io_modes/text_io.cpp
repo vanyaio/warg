@@ -1,30 +1,5 @@
-#include "io.h"
-
-
-IO_TO_CONT_MSG SwitchIO::move(){
-    IO_TO_CONT_MSG res;
-    std::cout << "Available graphical modes:\n";
-    for (int i = 0; i < IOfactory::IOlist.size(); i++)
-      std::cout << i << ". " << IOfactory::IOlist[i] << std::endl;
-
-    std::cout << "Type number:\n";
-    int new_io_num;
-    std::cin >> new_io_num;
-
-    res.type = CHANGE_IO;
-    res.new_io_num = new_io_num;
-    return res;
-}
-SwitchIO::SwitchIO(Field* _field_ptr){
-  this->field_ptr = _field_ptr;
-}
-SwitchIO::~SwitchIO(){};
-
-
-
-
-
-
+#include "text_io.h"
+#include "../io_factory.h"
 TextIO::TextIO(Field* _field_ptr){
   this->field_ptr = _field_ptr;
 }
@@ -112,32 +87,4 @@ bool TextIO::isMoveInCorrect(int arr[]){
     if (arr[i] >= FIELD_SIZE || arr[i] < 0)
       return false;
   return true;
-}
-
-
-
-
-
-
-
-
-
-
-const std::vector<std::string> IOfactory :: IOlist({"Switch menu", "Plain text", "Colored text"});
-IO* IOfactory::get_new_io_ptr(int new_io_num, Field* field_ptr)
-{
-  switch (new_io_num)
-  {
-    case 0:
-      return new SwitchIO(field_ptr);
-      break;
-    case 1:
-      return new TextIO(field_ptr);
-      break;
-    case 2:
-      return new ColoredIO(field_ptr);
-      break;
-    default:
-      return new TextIO(field_ptr);
-  }
 }

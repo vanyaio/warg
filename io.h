@@ -12,31 +12,4 @@ public:
   virtual ~IO();
 };
 
-class TextIO : public IO{
-public:
-  TextIO(Field* _field_ptr);
-  ~TextIO();
-
-  IO_TO_CONT_MSG move();
-  IO_TO_CONT_MSG handleFinish();
-  bool SwitchIOrequested();
-  void printField();
-  bool isMoveInCorrect(int arr[]);
-};
-
-class SwitchIO : public IO{
-public:
-  SwitchIO(Field* _field_ptr);
-  ~SwitchIO();
-
-  IO_TO_CONT_MSG move();
-};
-
-class IOfactory{
-public:
-  const static std::vector<std::string> IOlist;
-  static IO* get_new_io_ptr(int new_io_num, Field* field_ptr);
-};
-
-#include "colored_io.h"
 #endif
