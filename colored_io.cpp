@@ -13,8 +13,7 @@ void print(int x, int y, pixel& _img)
     std::cout << _img.sign;
 }
 
-
-
+IO::~IO(){};
 
 ColoredIO::ColoredIO(Field* _field_ptr)
 {
@@ -22,16 +21,42 @@ ColoredIO::ColoredIO(Field* _field_ptr)
   this->cursored_cell = &(this->field_ptr->cells_arr[0][0]);
   this->selected_cell = nullptr;
   this->last_key_pressed = clock();
+  this->info_is_printed = false;
+  SetConsoleTextAttribute(hConsole, 271);
   system("cls");
 }
 ColoredIO::~ColoredIO()
 {
-  SetConsoleTextAttribute(hConsole, 1);
-  system("cls");
+/*  SetConsoleTextAttribute(hConsole, 271);
+  system("cls");*/
 }
 
 void ColoredIO::print_field()
 {
+  if (!this->info_is_printed){
+    system("cls");
+
+    COORD c1;
+    c1.X = 0;
+    c1.Y = 0;
+
+    SetConsoleCursorPosition(hConsole, c1);
+
+    SetConsoleTextAttribute(hConsole, RED_IO);
+    std::cout << "R";
+    SetConsoleTextAttribute(hConsole, 271);
+    std::cout << " ";
+
+    SetConsoleTextAttribute(hConsole, GREEN_IO);
+    std::cout << "G";
+    SetConsoleTextAttribute(hConsole, 271);
+    std::cout << " ";
+
+    SetConsoleTextAttribute(hConsole, BLUE_IO);
+    std::cout << "B";
+    SetConsoleTextAttribute(hConsole, 271);
+    std::cout << " ";
+  }
   for (int i = 0; i < FIELD_SIZE; i++)
     for (int j = 0; j < FIELD_SIZE; j++)
     {
@@ -95,8 +120,10 @@ void ColoredIO::print_field()
 
       }
 
-      if (curr_ptr->blocked_space)
+      if (curr_ptr->blocked_space){
         curr_color = BLOCKED_COLOR;
+        curr_sign = 'x';
+      }
       if (curr_ptr->free_space)
         curr_color = FREE_COLOR;
 
@@ -105,17 +132,10 @@ void ColoredIO::print_field()
       if (curr_pixel.color != this->buff[i][j].color
       || curr_pixel.sign != this->buff[i][j].sign)
       {
-        print(i, j, curr_pixel);
+        print(i + 1, j, curr_pixel);
         this->buff[i][j] = curr_pixel;
       }
     }
-
-
-    if (this->selected_cell != nullptr)
-    {
-
-    }
-
 
     int y_buff_cursor = -1;
     for (int y = 0; y < FIELD_SIZE; y++)
@@ -131,28 +151,65 @@ void ColoredIO::print_field()
     if ((*this->cursored_cell)->x != x_buff_cursor)
     {
       if (x_buff_cursor != -1){
-        print(x_buff_cursor, FIELD_SIZE, empty_pixel);
+        print(x_buff_cursor + 1, FIELD_SIZE, empty_pixel);
         this->buff[x_buff_cursor][FIELD_SIZE] = empty_pixel;
       }
 
       pixel _pix1('<', 100);
-      print((*this->cursored_cell)->x, FIELD_SIZE, _pix1);
+      print((*this->cursored_cell)->x + 1, FIELD_SIZE, _pix1);
       this->buff[(*this->cursored_cell)->x][FIELD_SIZE] = _pix1;
     }
 
     if ((*this->cursored_cell)->y != y_buff_cursor)
     {
       if (y_buff_cursor != -1){
-        print(FIELD_SIZE, y_buff_cursor, empty_pixel);
+        print(FIELD_SIZE + 1, y_buff_cursor, empty_pixel);
         this->buff[FIELD_SIZE][y_buff_cursor] = empty_pixel;
       }
 
       pixel _pix('^', 100);
-      print(FIELD_SIZE, (*this->cursored_cell)->y, _pix);
+      print(FIELD_SIZE + 1, (*this->cursored_cell)->y, _pix);
       this->buff[FIELD_SIZE][(*this->cursored_cell)->y] = _pix;
     }
-}
 
+    this->print_info();
+}
+void ColoredIO::print_info()
+{
+    if (this->info_is_printed)
+      return;
+    COORD c1;
+    c1.X = 0;
+    c1.Y = 7;
+
+    SetConsoleCursorPosition(hConsole, c1);
+    SetConsoleTextAttribute(hConsole, 271);
+
+    std::cout << "Press arrows to move the cursor and selected chips\n";
+    std::cout << "Press 'c' to select\\deselect chip for moving\n";
+    std::cout << "Press 's' to switch graphical mode\n";
+    SetConsoleTextAttribute(hConsole, RED_IO);
+    std::cout << "o";
+    SetConsoleTextAttribute(hConsole, GREEN_IO);
+    std::cout << "o";
+    SetConsoleTextAttribute(hConsole, BLUE_IO);
+    std::cout << "o";
+    SetConsoleTextAttribute(hConsole, 271);
+    std::cout << " - chips\n";
+
+    SetConsoleTextAttribute(hConsole, FREE_COLOR);
+    std::cout << " ";
+    SetConsoleTextAttribute(hConsole, 271);
+    std::cout << " - free cell\n";
+
+    SetConsoleTextAttribute(hConsole, BLOCKED_COLOR);
+    std::cout << "x";
+    SetConsoleTextAttribute(hConsole, 271);
+    std::cout << " - blocked cell\n";
+
+    this->info_is_printed = true;
+
+}
 int ColoredIO::getKeyPressed()
 {
   std::vector<int> keys;
@@ -173,8 +230,28 @@ int ColoredIO::getKeyPressed()
 
 IO_TO_CONT_MSG ColoredIO::move()
 {
+  if (this->field_ptr->isFinished()){
+    this->cursored_cell = &(this->field_ptr->cells_arr[0][0]);
+    this->selected_cell = nullptr;
+
+    SetConsoleTextAttribute(hConsole, 271);
+    system("cls");
+    this->info_is_printed = false;
+
+    IO_TO_CONT_MSG res;
+    res.type = GAME_FINISHED;
+    std::cout << "YOU WIN! CONTINUE: Y or N \n";
+    char c;
+    std::cin >> c;
+    res.new_game = false;
+    if (c == 'y' || c == 'Y')
+      res.new_game = true;
+
+    return res;
+  }
+
   this->print_field();
-  if (((double)(clock() - last_key_pressed) / CLOCKS_PER_SEC) < 0.3)
+  if (((double)(clock() - last_key_pressed) / CLOCKS_PER_SEC) < 0.2)
   {
     IO_TO_CONT_MSG msg;
     return msg;
@@ -205,6 +282,7 @@ bool ColoredIO::switchIOrequested(int key_pressed)
 }
 IO_TO_CONT_MSG ColoredIO::handleSwitchIO()
 {
+  SetConsoleTextAttribute(hConsole, 271);
   system("cls");
   IO_TO_CONT_MSG res;
   res.type = CHANGE_IO;
@@ -236,7 +314,7 @@ void ColoredIO::moveCursor(int key_pressed)
   {
     int curr_x = (*this->cursored_cell)->x, curr_y = (*this->cursored_cell)->y;
     int new_x = dx + curr_x, new_y = dy + curr_y;
-    if (!((new_x >= 0 && new_x <FIELD_SIZE) && (new_y >= 0 && new_y <FIELD_SIZE)))
+    if (!((new_x >= 0 && new_x < FIELD_SIZE) && (new_y >= 0 && new_y < FIELD_SIZE)))
       return;
     this->cursored_cell = &(this->field_ptr->cells_arr[new_x][new_y]);
   }

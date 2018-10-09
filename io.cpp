@@ -18,7 +18,7 @@ IO_TO_CONT_MSG SwitchIO::move(){
 SwitchIO::SwitchIO(Field* _field_ptr){
   this->field_ptr = _field_ptr;
 }
-
+SwitchIO::~SwitchIO(){};
 
 
 
@@ -28,7 +28,7 @@ SwitchIO::SwitchIO(Field* _field_ptr){
 TextIO::TextIO(Field* _field_ptr){
   this->field_ptr = _field_ptr;
 }
-
+TextIO::~TextIO(){};
 IO_TO_CONT_MSG TextIO::move(){
   if (this->field_ptr->isFinished())
     return this->handleFinish();
@@ -70,13 +70,15 @@ IO_TO_CONT_MSG TextIO::handleFinish(){
     std::cout << "YOU WIN! CONTINIE: Y or N \n";
     char c;
     std::cin >> c;
+    res.new_game = false;
     if (c == 'y' || c == 'Y')
       res.new_game = true;
+
     return res;
 }
 
 bool TextIO::SwitchIOrequested(){
-  std::cout << "Switch or Move?\n";
+  std::cout << "Type 's' to switch graphical mode or 'm' to move\n";
   char c;
   std::cin >> c;
   if (c == 's' || c == 'S')

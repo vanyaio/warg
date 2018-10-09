@@ -17,13 +17,14 @@ public:
   Cell** cursored_cell;
   clock_t last_key_pressed;
   pixel buff[FIELD_SIZE + 1][FIELD_SIZE + 1];
+  bool info_is_printed;
 
   ColoredIO(Field* _field_ptr);
   ~ColoredIO();
 
   IO_TO_CONT_MSG move();
   void print_field();
-
+  void print_info();
   int getKeyPressed();
   void moveCursor(int key_pressed);
   void selectCell(int key_pressed);

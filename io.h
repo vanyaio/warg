@@ -9,11 +9,13 @@ class IO{
 public:
   Field* field_ptr;
   virtual IO_TO_CONT_MSG move() = 0;
+  virtual ~IO();
 };
 
 class TextIO : public IO{
 public:
   TextIO(Field* _field_ptr);
+  ~TextIO();
 
   IO_TO_CONT_MSG move();
   IO_TO_CONT_MSG handleFinish();
@@ -25,6 +27,7 @@ public:
 class SwitchIO : public IO{
 public:
   SwitchIO(Field* _field_ptr);
+  ~SwitchIO();
 
   IO_TO_CONT_MSG move();
 };
